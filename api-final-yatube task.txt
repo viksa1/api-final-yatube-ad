@@ -1,0 +1,594 @@
+У меня есть проект api-final-yatube-ad.
+мне нужно его довести до ума в соответсвтии с документацией в формате redoc.
+стурктура проекта
+api-final-yatube-ad
+├── postman_collection
+├── tests
+├── venv
+└── yatube_api
+    ├── api
+    │   ├── __pycache__
+    │   ├── templates
+    │   ├── __init__.py
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── models.py
+    │   ├── serializers.py
+    │   ├── tests.py
+    │   ├── urls.py
+    │   └── views.py
+    ├── posts
+    │   ├── __pycache__
+    │   ├── migrations
+    │   ├── __init__.py
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── models.py
+    │   ├── tests.py
+    │   └── views.py
+    ├── static
+    ├── yatube_api
+    │   ├── __pycache__
+    │   ├── __init__.py
+    │   ├── asgi.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   └── wsgi.py
+    ├── db.sqlite3
+    ├── manage.py
+    ├── pytest.ini
+    ├── README.md
+    ├── requirements.txt
+    └── setup.cfg
+документация redoc
+follow
+follow_list
+autorizations: basic
+query parameters: search 
+string: A search term.
+Response
+get http://127.0.0.1:8000/api/v1/follow/
+[
+  {
+    "id": 0,
+    "user": "string",
+    "following": "string"
+  }
+]
+follow_create
+autorizations: basic
+requet body schema: application/json
+required
+following (required) string (Following) ^[\w.@+-]+$
+string: A search term.
+Request
+get http://127.0.0.1:8000/api/v1/follow/
+{
+  "following": "string"
+}
+Response
+{
+  "id": 0,
+  "user": "string",
+  "following": "string"
+}
+follow_read
+autorizations: basic
+id (required): string
+Responses
+RESPONSE SCHEMA: application/json
+
+Array [
+  ├── id         integer (ID)
+  ├── user       string (User)
+  └── following  string (Following) ^[\w.@+-]+$
+      (required)
+]
+http://127.0.0.1:8000/api/v1/follow/{id}/
+{
+  "id": 0,
+  "user": "string",
+  "following": "string"
+}
+
+follow_update
+autorizations: basic
+id (required): string
+
+Responses
+RESPONSE SCHEMA: application/json
+
+Array [
+  ├── id         integer (ID)
+  ├── user       string (User)
+  └── following  string (Following) ^[\w.@+-]+$
+      (required)
+]
+request samples
+http://127.0.0.1:8000/api/v1/follow/{id}/
+{
+  "following": "string"
+}
+
+response samples
+{
+  "id": 0,
+  "user": "string",
+  "following": "string"
+}
+follow_partial_update
+autorizations: basic
+id (required): string
+request body schema: application/json required
+following  string (Following) ^[\w.@+-]+$
+      (required)
+RESPONSE SCHEMA: application/json
+
+Array [
+  ├── id         integer (ID)
+  ├── user       string (User)
+  └── following  string (Following) ^[\w.@+-]+$
+      (required)
+]
+http://127.0.0.1:8000/api/v1/follow/{id}/
+{
+  "following": "string"
+}
+
+response samples
+{
+  "id": 0,
+  "user": "string",
+  "following": "string"
+}
+follow_delete
+autorizations: basic
+id (required): string
+
+responses
+204
+http://127.0.0.1:8000/api/v1/follow/{id}/
+
+groups
+groups_list
+autorizations: basic
+
+RESPONSE SCHEMA: application/json
+
+Array [
+  ├── id           integer (ID)
+  ├── title        string (Title) [1 .. 200] characters
+  │   (required)
+  ├── slug         string <slug> (Slug) [1 .. 50] characters ^[-a-zA-Z0-9_]+$
+  │   (required)
+  └── description  string (Description) non-empty
+      (required)
+]
+response
+[
+  {
+    "id": 0,
+    "title": "string",
+    "slug": "string",
+    "description": "string"
+  }
+]
+groups_read
+
+autorizations: basic
+id (required): A unique integer value identifying this group. (integer)
+responses
+http://127.0.0.1:8000/api/v1/groups/{id}/
+{
+  "id": 0,
+  "title": "string",
+  "slug": "string",
+  "description": "string"
+}
+posts
+posts_list
+authorizations: basic
+QUERY PARAMETERS
+
+├── search   string
+│            A search term.
+│
+├── limit    integer
+│            Number of results to return per page.
+│
+└── offset   integer
+             The initial index from which to return the results.
+RESPONSE SCHEMA: application/json
+
+├── count      integer
+│   (required)
+│
+├── next       string or null <uri>
+│
+├── previous   string or null <uri>
+│
+└── results    Array of objects (Post)
+    (required)
+
+http://127.0.0.1:8000/api/v1/posts/
+{
+  "count": 0,
+  "next": "http://example.com",
+  "previous": "http://example.com",
+  "results": [
+    {
+      "id": 0,
+      "text": "string",
+      "pub_date": "2019-08-24T14:15:22Z",
+      "author": "string",
+      "image": "http://example.com",
+      "group": 0
+    }
+  ]
+}
+posts_create
+authorizations: basic
+
+REQUEST BODY SCHEMA: application/json
+required
+
+├── text   string (Text) [non-empty]
+│   (required)
+│
+└── group  integer or null (Group)
+Responses
+
+201
+
+RESPONSE SCHEMA: application/json
+
+├── id         integer (ID)
+│
+├── text       string (Text) [non-empty]
+│   (required)
+│
+├── pub_date   string <date-time> (Дата публикации)
+│
+├── author     string (Author)
+│
+├── image      string or null <uri> (Image)
+│
+└── group      integer or null (Group)
+http://127.0.0.1:8000/api/v1/posts/
+request sample
+{
+  "text": "string",
+  "group": 0
+}
+response sample
+{
+  "id": 0,
+  "text": "string",
+  "pub_date": "2019-08-24T14:15:22Z",
+  "author": "string",
+  "image": "http://example.com",
+  "group": 0
+}
+posts_read
+authorizations: basic
+
+GET /posts/{id}/
+
+Response samples
+
+200
+
+RESPONSE SCHEMA: application/json
+
+├── id         integer (ID)
+│
+├── text       string (Text) [non-empty]
+│   (required)
+│
+├── pub_date   string <date-time> (Дата публикации)
+│
+├── author     string (Author)
+│
+├── image      string or null <uri> (Image)
+│
+└── group      integer or null (Group)
+
+http://127.0.0.1:8000/api/v1/posts/{id}/
+
+response sample
+{
+  "id": 0,
+  "text": "string",
+  "pub_date": "2019-08-24T14:15:22Z",
+  "author": "string",
+  "image": "http://example.com",
+  "group": 0
+}
+posts_update
+authorizations: basic
+
+PATH PARAMETERS
+
+├── id   integer
+│   (required)
+│        A unique integer value identifying this post.
+
+REQUEST BODY SCHEMA: application/json
+required
+
+├── text   string (Text) [non-empty]
+│   (required)
+│
+└── group  integer or null (Group)
+
+Responses
+
+200
+
+RESPONSE SCHEMA: application/json
+
+├── id         integer (ID)
+│
+├── text       string (Text) [non-empty]
+│   (required)
+│
+├── pub_date   string <date-time> (Дата публикации)
+│
+├── author     string (Author)
+│
+├── image      string or null <uri> (Image)
+│
+└── group      integer or null (Group)
+
+http://127.0.0.1:8000/api/v1/posts/{id}/
+
+request sample
+{
+  "text": "string",
+  "group": 0
+}
+response sample
+{
+  "id": 0,
+  "text": "string",
+  "pub_date": "2019-08-24T14:15:22Z",
+  "author": "string",
+  "image": "http://example.com",
+  "group": 0
+}
+posts_partial_update
+authorizations: basic
+
+PATH PARAMETERS
+
+├── id   integer
+│   (required)
+│        A unique integer value identifying this post.
+
+REQUEST BODY SCHEMA: application/json
+required
+
+├── text   string (Text) [non-empty]
+│   (required)
+│
+└── group  integer or null (Group)
+
+Responses
+
+200
+
+RESPONSE SCHEMA: application/json
+
+├── id         integer (ID)
+│
+├── text       string (Text) [non-empty]
+│   (required)
+│
+├── pub_date   string <date-time> (Дата публикации)
+│
+├── author     string (Author)
+│
+├── image      string or null <uri> (Image)
+│
+└── group      integer or null (Group)
+
+http://127.0.0.1:8000/api/v1/posts/{id}/
+
+request sample
+{
+  "text": "string",
+  "group": 0
+}
+response sample
+{
+  "id": 0,
+  "text": "string",
+  "pub_date": "2019-08-24T14:15:22Z",
+  "author": "string",
+  "image": "http://example.com",
+  "group": 0
+}
+posts_delete
+authorizations: basic
+
+PATH PARAMETERS
+
+├── id   integer
+│   (required)
+│        A unique integer value identifying this post.
+
+Responses
+
+204
+
+RESPONSE SCHEMA: нет
+
+http://127.0.0.1:8000/api/v1/posts/{id}/
+
+request sample
+(тело запроса отсутствует)
+
+response sample
+(тело ответа отсутствует, сервер возвращает пустой ответ)
+
+posts_comments_list
+authorizations: basic
+
+PATH PARAMETERS
+
+└── post_id   string
+    (required)
+
+Responses
+
+200
+
+RESPONSE SCHEMA: application/json
+
+Array [
+  ├── id       integer (ID)
+  │
+  ├── author   string (Author)
+  │
+  ├── post     integer (Post)
+  │
+  ├── text     string (Text) [non-empty]
+  │   (required)
+  │
+  └── created  string <date-time> (Дата добавления)
+]
+
+http://127.0.0.1:8000/api/v1/posts/{post_id}/comments/
+
+request sample
+(тело запроса отсутствует, так как это GET)
+
+response sample
+[
+  {
+    "id": 0,
+    "author": "string",
+    "post": 0,
+    "text": "string",
+    "created": "2019-08-24T14:15:22Z"
+  }
+]
+posts_comments_create
+authorizations: basic
+
+PATH PARAMETERS
+
+└── post_id   string
+    (required)
+
+REQUEST BODY SCHEMA: application/json
+required
+
+└── text   string (Text) [non-empty]
+    (required)
+
+Responses
+
+201
+
+RESPONSE SCHEMA: application/json
+
+├── id       integer (ID)
+│
+├── author   string (Author)
+│
+├── post     integer (Post)
+│
+├── text     string (Text) [non-empty]
+│   (required)
+│
+└── created  string <date-time> (Дата добавления)
+
+http://127.0.0.1:8000/api/v1/posts/{post_id}/comments/
+
+request sample
+{
+  "text": "string"
+}
+response sample
+{
+  "id": 0,
+  "author": "string",
+  "post": 0,
+  "text": "string",
+  "created": "2019-08-24T14:15:22Z"
+}
+
+posts_comments_partial_update
+authorizations: basic
+
+PATH PARAMETERS
+
+├── post_id   string
+│   (required)
+│
+└── id        string
+    (required)
+
+REQUEST BODY SCHEMA: application/json
+required
+
+└── text   string (Text) [non-empty]
+    (required)
+
+Responses
+
+200
+
+RESPONSE SCHEMA: application/json
+
+├── id       integer (ID)
+│
+├── author   string (Author)
+│
+├── post     integer (Post)
+│
+├── text     string (Text) [non-empty]
+│   (required)
+│
+└── created  string <date-time> (Дата добавления)
+
+http://127.0.0.1:8000/api/v1/posts/{post_id}/comments/{id}/
+
+request sample
+{
+  "text": "string"
+}
+response sample
+{
+  "id": 0,
+  "author": "string",
+  "post": 0,
+  "text": "string",
+  "created": "2019-08-24T14:15:22Z"
+}
+
+posts_comments_delete
+authorizations: basic
+
+PATH PARAMETERS
+
+├── post_id   string
+│   (required)
+│
+└── id        string
+    (required)
+
+Responses
+
+204
+
+RESPONSE SCHEMA: нет
+
+http://127.0.0.1:8000/api/v1/posts/{post_id}/comments/{id}/
+
+request sample
+(тело запроса отсутствует)
+
+response sample
+(тело ответа отсутствует, сервер возвращает пустой ответ)
